@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Speech to Text and Text to Speech App</title>
+	</head>
+	<body>
+		<h1>Speech-to-Text and Text-to-Speech Web App</h1>
+
+		<div>
+			<h2>Speech-to-Text</h2>
+			<button onclick="startRecording()">Start Recording</button>
+			<p id="speech-output">Speech recognition will appear here...</p>
+		</div>
+
+		<div>
+			<h2>Text-to-Speech</h2>
+			<textarea id="text-input" placeholder="Enter text"></textarea>
+			<button onclick="convertTextToSpeech()">Convert to Speech</button>
+			<audio id="audio-output" controls></audio>
+		</div>
+
+		<script>
+			// Frontend: Speech-to-Text functionality
+			function startRecording() {
+				const recognition = new webkitSpeechRecognition()
+				recognition.lang = "en-US"
+				recognition.onresult = function (event) {
+					document.getElementById("speech-output").innerText =
+						event.results[0][0].transcript
+				}
+				recognition.start()
+			}
+
+			// Frontend: Text-to-Speech functionality
+			function convertTextToSpeech() {
+				const text = document.getElementById("text-input").value
+				fetch("/api/tts", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ text: text }),
+				})
+					.then(response => response.json())
+					.then(data => {
+						const audio = document.getElementById("audio-output")
+						audio.src = "data:audio/wav;base64," + data.audioContent
+						audio.play()
+					})
+			}
+		</script>
+	</body>
+</html>
