@@ -3,6 +3,7 @@
 
 import { useState, type ChangeEvent } from "react";
 import { convertTextToSpeech } from "../actions";
+import { Button } from "./ui/button";
 
 export default function TextToSpeech() {
   const [textInput, setTextInput] = useState<string>("");
@@ -29,12 +30,9 @@ export default function TextToSpeech() {
         placeholder="Enter text"
         rows={4}
       ></textarea>
-      <button
-        onClick={handleConvert}
-        className="rounded bg-green-500 px-4 py-2 text-white"
-      >
+      <Button onClick={handleConvert} className="rounded px-4 py-2 text-white">
         Convert to Speech
-      </button>
+      </Button>
       {audioSrc && <audio className="mt-4" controls src={audioSrc}></audio>}
     </div>
   );
