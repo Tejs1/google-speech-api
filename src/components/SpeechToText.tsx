@@ -54,7 +54,9 @@ const AudioToText: React.FC = () => {
       console.log("connected", socket.id);
       setConnection(socket);
       socket.emit("startGoogleCloudStream");
+      setIsRecording(true); // Only set recording once connected
     });
+
     socket.emit("send_message", "hello world");
 
     socket.on("receive_message", (data) => {
@@ -68,6 +70,7 @@ const AudioToText: React.FC = () => {
 
     socket.on("disconnect", () => {
       console.log("disconnected", socket.id);
+      setIsRecording(false); // Stop recording on disconnect
     });
   };
 
@@ -84,20 +87,13 @@ const AudioToText: React.FC = () => {
   };
 
   useEffect(() => {
-    (async () => {
-      if (connection) {
-        if (isRecording) {
-          return;
-        }
-
+    if (connection && isRecording) {
+      (async () => {
         const stream = await getMediaStream();
-
         audioContextRef.current = new window.AudioContext();
-
         await audioContextRef.current.audioWorklet.addModule(
           "/src/worklets/recorderWorkletProcessor.js",
         );
-
         audioContextRef.current.resume();
 
         audioInputRef.current =
@@ -109,19 +105,17 @@ const AudioToText: React.FC = () => {
         );
 
         processorRef.current.connect(audioContextRef.current.destination);
-        await audioContextRef.current.resume();
-
         audioInputRef.current.connect(processorRef.current);
 
         processorRef.current.port.onmessage = (event: any) => {
           const audioData = event.data;
           connection.emit("send_audio_data", { audio: audioData });
         };
-        setIsRecording(true);
-      } else {
-        console.error("No connection");
-      }
-    })();
+      })();
+    } else {
+      console.error("No connection or not recording");
+    }
+
     return () => {
       if (isRecording) {
         processorRef.current?.disconnect();
@@ -131,7 +125,7 @@ const AudioToText: React.FC = () => {
         }
       }
     };
-  }, [connection, isRecording, recorder]);
+  }, [connection, isRecording]);
 
   return (
     <>
