@@ -3,7 +3,7 @@
 
 import { TextToSpeechClient } from "@google-cloud/text-to-speech";
 import { env } from "@/env";
-import { type GoogleServiceKey } from "../types";
+import { type GoogleServiceKey } from "@/types";
 
 // import { SpeechClient } from "@google-cloud/speech";
 

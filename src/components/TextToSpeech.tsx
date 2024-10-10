@@ -1,43 +1,33 @@
-// app/components/TextToSpeech.tsx
 "use client";
+import React from "react";
+import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
-import { useState, type ChangeEvent } from "react";
-import { convertTextToSpeech } from "../services/textToSpeechService";
-import { Button } from "./ui/button";
-
-export default function TextToSpeech() {
-  const [textInput, setTextInput] = useState<string>("");
-  const [audioSrc, setAudioSrc] = useState<string>("");
-
-  const handleConvert = async () => {
-    try {
-      const result = await convertTextToSpeech(textInput);
-      setAudioSrc(`data:audio/wav;base64,${result.audioContent}`);
-    } catch (error) {
-      console.error("Error converting text to speech:", error);
-    }
-  };
+const TextToSpeech: React.FC = () => {
+  const { textInput, audioSrc, handleInputChange, handleConvert } =
+    useTextToSpeech();
 
   return (
-    <div>
+    <div className="container mx-auto py-8">
       <h2 className="mb-2 text-xl font-semibold">Text-to-Speech</h2>
       <p className="mb-4">
         Enter text in the textarea below and click the &quot;Convert to
         Speech&quot; button to hear it.
       </p>
-      <textarea
+      <Textarea
         value={textInput}
-        onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-          setTextInput(e.target.value)
-        }
-        className="mb-2 w-full rounded border p-2"
+        onChange={handleInputChange}
+        className="mb-4 w-full"
         placeholder="Enter text"
         rows={4}
-      ></textarea>
-      <Button onClick={handleConvert} className="rounded px-4 py-2 text-white">
+      />
+      <Button onClick={handleConvert} className="mb-4">
         Convert to Speech
       </Button>
-      {audioSrc && <audio className="mt-4" controls src={audioSrc}></audio>}
+      {audioSrc && <audio className="w-full" controls src={audioSrc}></audio>}
     </div>
   );
-}
+};
+
+export default TextToSpeech;

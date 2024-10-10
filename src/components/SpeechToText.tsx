@@ -16,8 +16,9 @@ const SpeechToText: React.FC = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <div className="text-center">
-        <h1 className="mb-8 text-3xl font-bold">Speech To Text</h1>
+      <div>
+        <h1 className="mb-4 text-3xl font-bold">Speech To Text</h1>
+
         <p className="mb-4">
           Click the &quot;Start&quot; button to begin recording and the
           &quot;Stop&quot; button to stop.
@@ -42,9 +43,7 @@ const SpeechToText: React.FC = () => {
         </div>
       </div>
       <div className="mt-8">
-        <h2 className="mb-4 text-center text-2xl font-semibold">
-          Recognition History
-        </h2>
+        <h2 className="mb-4 text-2xl font-semibold">Recognition History</h2>
         <Card>
           <CardHeader>
             <CardTitle>Transcriptions</CardTitle>
