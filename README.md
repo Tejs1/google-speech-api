@@ -4,9 +4,9 @@
 
 ## Overview
 
-![HLD](src/images/hld.png)
+![HLD](image.png)
 
-![LLD](src/images/lld.png)
+![LLD](image-1.png)
 
 ### How to run the app
 
