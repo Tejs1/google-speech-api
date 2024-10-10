@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { io, type Socket } from "socket.io-client";
