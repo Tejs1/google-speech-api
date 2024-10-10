@@ -29,7 +29,6 @@ const AudioToText: React.FC = () => {
   const [currentRecognition, setCurrentRecognition] = useState<string>();
   const [recognitionHistory, setRecognitionHistory] = useState<string[]>([]);
   const [isRecording, setIsRecording] = useState<boolean>(false);
-  const [recorder, setRecorder] = useState<MediaRecorder | null>(null);
   const processorRef = useRef<AudioWorkletNode>();
   const audioContextRef = useRef<AudioContext>();
   const audioInputRef = useRef<MediaStreamAudioSourceNode>();
@@ -63,7 +62,7 @@ const AudioToText: React.FC = () => {
       console.log("received message", data);
     });
 
-    socket.on("receive_audio_text", (data) => {
+    socket.on("receive_audio_text", (data: WordRecognized) => {
       speechRecognized(data);
       console.log("received audio text", data);
     });
@@ -82,19 +81,19 @@ const AudioToText: React.FC = () => {
     audioInputRef.current?.disconnect();
     void audioContextRef.current?.close();
     setConnection(undefined);
-    setRecorder(null);
+
     setIsRecording(false);
   };
 
   useEffect(() => {
     if (connection && isRecording) {
-      (async () => {
+      void (async () => {
         const stream = await getMediaStream();
         audioContextRef.current = new window.AudioContext();
         await audioContextRef.current.audioWorklet.addModule(
           "/src/worklets/recorderWorkletProcessor.js",
         );
-        audioContextRef.current.resume();
+        void audioContextRef.current.resume();
 
         audioInputRef.current =
           audioContextRef.current.createMediaStreamSource(stream);
@@ -107,8 +106,8 @@ const AudioToText: React.FC = () => {
         processorRef.current.connect(audioContextRef.current.destination);
         audioInputRef.current.connect(processorRef.current);
 
-        processorRef.current.port.onmessage = (event: any) => {
-          const audioData = event.data;
+        processorRef.current.port.onmessage = (event: MessageEvent) => {
+          const audioData = event.data as Float32Array;
           connection.emit("send_audio_data", { audio: audioData });
         };
       })();
@@ -121,7 +120,7 @@ const AudioToText: React.FC = () => {
         processorRef.current?.disconnect();
         audioInputRef.current?.disconnect();
         if (audioContextRef.current?.state !== "closed") {
-          audioContextRef.current?.close();
+          void audioContextRef.current?.close();
         }
       }
     };
