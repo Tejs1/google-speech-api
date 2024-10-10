@@ -1,9 +1,10 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mic, Ban, Volume2 } from "lucide-react";
 import { useSpeechToText } from "@/hooks/useSpeechToText";
+import { pingBackend } from "@/lib/utils";
 
 const SpeechToText: React.FC = () => {
   const {
@@ -13,6 +14,11 @@ const SpeechToText: React.FC = () => {
     startRecording,
     stopRecording,
   } = useSpeechToText();
+
+  useEffect(() => {
+    //we are pinging the backend to wake it up from cold start
+    void pingBackend();
+  }, []);
 
   return (
     <div className="container mx-auto py-8">
