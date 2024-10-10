@@ -5,6 +5,7 @@ import * as io from "socket.io-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mic, Ban, Volume2 } from "lucide-react";
+import { pingBackend } from "@/lib/utils";
 const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:8081";
 
 const sampleRate = 16000;
@@ -40,6 +41,11 @@ const AudioToText: React.FC = () => {
       setRecognitionHistory((old) => [data.text, ...old]);
     } else setCurrentRecognition(data.text + "...");
   };
+
+  useEffect(() => {
+    // Ping the backend when the component mounts on the client side
+    void pingBackend();
+  }, []);
 
   useEffect(() => {
     console.log("\n\nrecognitionHistory", recognitionHistory);

@@ -1,8 +1,5 @@
-// app/page.tsx
-
 import SpeechToText from "../components/SpeechToText";
 import TextToSpeech from "../components/TextToSpeech";
-
 export default function Home() {
   return (
     <main className="container mx-auto p-4">
