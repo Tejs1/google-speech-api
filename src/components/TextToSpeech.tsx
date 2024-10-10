@@ -21,6 +21,10 @@ export default function TextToSpeech() {
   return (
     <div>
       <h2 className="mb-2 text-xl font-semibold">Text-to-Speech</h2>
+      <p className="mb-4">
+        Enter text in the textarea below and click the &quot;Convert to
+        Speech&quot; button to hear it.
+      </p>
       <textarea
         value={textInput}
         onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>

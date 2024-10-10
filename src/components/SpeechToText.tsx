@@ -18,6 +18,10 @@ const SpeechToText: React.FC = () => {
     <div className="container mx-auto py-8">
       <div className="text-center">
         <h1 className="mb-8 text-3xl font-bold">Speech To Text</h1>
+        <p className="mb-4">
+          Click the &quot;Start&quot; button to begin recording and the
+          &quot;Stop&quot; button to stop.
+        </p>
         <div className="space-x-4">
           <Button
             variant={isRecording ? "destructive" : "default"}
