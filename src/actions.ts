@@ -2,13 +2,24 @@
 "use server";
 
 import { TextToSpeechClient } from "@google-cloud/text-to-speech";
+import { env } from "@/env";
+import { type GoogleServiceKey } from "./lib/utils";
+
 // import { SpeechClient } from "@google-cloud/speech";
 
 export async function convertTextToSpeech(
   text: string,
 ): Promise<{ audioContent: string }> {
+  const credential: GoogleServiceKey = JSON.parse(
+    env.GOOGLE_APPLICATION_CREDENTIALS.toString(),
+  ) as GoogleServiceKey;
   try {
-    const client = new TextToSpeechClient();
+    const client = new TextToSpeechClient({
+      credentials: {
+        client_email: credential.client_email,
+        private_key: credential.private_key,
+      },
+    });
 
     const [response] = await client.synthesizeSpeech({
       input: { text: text },

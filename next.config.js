@@ -6,6 +6,10 @@ await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
 const config = {
+  env: {
+    BACKEND_URL: process.env.BACKEND_URL ?? "http://localhost:8081",
+  },
+
   webpack: (config) => {
     config.externals.push({
       "@google-cloud/text-to-speech": "commonjs @google-cloud/text-to-speech",

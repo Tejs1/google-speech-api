@@ -5,6 +5,7 @@ import * as io from "socket.io-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mic, Ban, Volume2 } from "lucide-react";
+const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:8081";
 
 const sampleRate = 16000;
 
@@ -48,7 +49,7 @@ const AudioToText: React.FC = () => {
     if (connection) {
       connection.disconnect();
     }
-    const socket = io.connect("http://localhost:8081");
+    const socket = io.connect(BACKEND_URL);
     socket.on("connect", () => {
       console.log("connected", socket.id);
       setConnection(socket);
