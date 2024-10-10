@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, type ChangeEvent } from "react";
-import { convertTextToSpeech } from "../actions";
+import { convertTextToSpeech } from "../services/textToSpeechService";
 import { Button } from "./ui/button";
 
 export default function TextToSpeech() {
