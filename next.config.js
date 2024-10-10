@@ -9,14 +9,6 @@ const config = {
   env: {
     BACKEND_URL: process.env.BACKEND_URL ?? "http://localhost:8081",
   },
-
-  webpack: (config) => {
-    config.externals.push({
-      "@google-cloud/text-to-speech": "commonjs @google-cloud/text-to-speech",
-      "@google-cloud/speech": "commonjs @google-cloud/speech",
-    });
-    return config;
-  },
 };
 
 export default config;
